@@ -1,0 +1,34 @@
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+
+const API_URL = 'https://api.cricapi.com/v1/currentMatches?apikey=152787fa-449f-401f-';
+
+function LiveScore() {
+  const [liveScore, setLiveScore] = useState(null);
+
+  useEffect(() => {
+    axios.get(API_URL)
+      .then(response => setLiveScore(response.data))
+      .catch(error => console.error('Error fetching live score:', error));
+  }, []);
+
+  return (
+    <div className='p-4'>
+      <h1 className='text-2xl font-bold mb-4'>Live IPL Score</h1>
+      {liveScore ? (
+        <div>
+          {liveScore.data.map((match) => (
+            <div key={match.id} className='p-2 border-b'>
+              <h2>{match.name}</h2>
+              <p>{match.status}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </div>
+  );
+}
+
+export default LiveScore;
